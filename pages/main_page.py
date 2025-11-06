@@ -1,68 +1,41 @@
 from .base_page import BasePage
-from selenium.webdriver.common.by import By
+from locators.main_page_locators import MainPageLocators
 import allure
 
 class MainPage(BasePage):
-    # Локаторы для вопросов (остаются без изменений)
-    QUESTION_LOCATORS = [
-        (By.ID, "accordion__heading-0"),
-        (By.ID, "accordion__heading-1"),
-        (By.ID, "accordion__heading-2"),
-        (By.ID, "accordion__heading-3"),
-        (By.ID, "accordion__heading-4"),
-        (By.ID, "accordion__heading-5"),
-        (By.ID, "accordion__heading-6"),
-        (By.ID, "accordion__heading-7")
-    ]
-
-    ANSWER_LOCATORS = [
-        (By.ID, "accordion__panel-0"),
-        (By.ID, "accordion__panel-1"),
-        (By.ID, "accordion__panel-2"),
-        (By.ID, "accordion__panel-3"),
-        (By.ID, "accordion__panel-4"),
-        (By.ID, "accordion__panel-5"),
-        (By.ID, "accordion__panel-6"),
-        (By.ID, "accordion__panel-7")
-    ]
-
-    # Исправленные локаторы для кнопок заказа
-    ORDER_BUTTON_TOP = (By.XPATH, "//button[@class='Button_Button__ra12g' and text()='Заказать']")
-    ORDER_BUTTON_BOTTOM = (By.XPATH, "//div[contains(@class, 'Home_FinishButton')]//button[text()='Заказать']")
-
-    # Локаторы для логотипов
-    SCOOTER_LOGO = (By.CLASS_NAME, "Header_LogoScooter__3lsAR")
-    YANDEX_LOGO = (By.CLASS_NAME, "Header_LogoYandex__3TSOI")
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.locators = MainPageLocators()
 
     @allure.step("Кликнуть на вопрос с индексом {question_index}")
     def click_question(self, question_index):
-        locator = self.QUESTION_LOCATORS[question_index]
+        locator = self.locators.QUESTION_LOCATORS[question_index]
         element = self.scroll_to_element(locator)
-        self.driver.execute_script("arguments[0].click();", element)
-        import time
-        time.sleep(1)
+        self.click_element(locator)
+        # Ожидаем появления ответа вместо time.sleep
+        answer_locator = self.locators.ANSWER_LOCATORS[question_index]
+        self.wait_for_element_visible(answer_locator)
 
     @allure.step("Получить текст ответа с индексом {answer_index}")
     def get_answer_text(self, answer_index):
-        locator = self.ANSWER_LOCATORS[answer_index]
+        locator = self.locators.ANSWER_LOCATORS[answer_index]
         element = self.wait_for_element_visible(locator)
         return element.text
 
     @allure.step("Кликнуть на верхнюю кнопку 'Заказать'")
     def click_order_button_top(self):
-        self.click_element(self.ORDER_BUTTON_TOP)
+        self.click_element(self.locators.ORDER_BUTTON_TOP)
 
     @allure.step("Кликнуть на нижнюю кнопку 'Заказать'")
     def click_order_button_bottom(self):
-        # Используем JavaScript для клика, чтобы избежать проблем с перекрытием
-        element = self.find_element(self.ORDER_BUTTON_BOTTOM)
-        self.driver.execute_script("arguments[0].scrollIntoView();", element)
-        self.driver.execute_script("arguments[0].click();", element)
+        element = self.find_element(self.locators.ORDER_BUTTON_BOTTOM)
+        self.scroll_to_element(self.locators.ORDER_BUTTON_BOTTOM)
+        self.click_element(self.locators.ORDER_BUTTON_BOTTOM)
 
     @allure.step("Кликнуть на логотип Самоката")
     def click_scooter_logo(self):
-        self.click_element(self.SCOOTER_LOGO)
+        self.click_element(self.locators.SCOOTER_LOGO)
 
     @allure.step("Кликнуть на логотип Яндекса")
     def click_yandex_logo(self):
-        self.click_element(self.YANDEX_LOGO)
+        self.click_element(self.locators.YANDEX_LOGO)

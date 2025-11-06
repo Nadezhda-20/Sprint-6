@@ -1,14 +1,14 @@
 import pytest
-import allure
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from data.urls import Urls
 
 @pytest.fixture(scope="function")
 def driver():
-    service = Service()  # Используем системный geckodriver
+    service = Service()
     
     options = webdriver.FirefoxOptions()
     options.add_argument("--width=1920")
@@ -16,7 +16,7 @@ def driver():
     
     driver = webdriver.Firefox(service=service, options=options)
     
-    driver.get("https://qa-scooter.praktikum-services.ru/")
+    driver.get(Urls.MAIN_PAGE)
     
     # Закрываем куки баннер если он есть
     try:

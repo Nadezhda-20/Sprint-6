@@ -1,7 +1,5 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
-import os
 import allure
 
 class BasePage:
@@ -43,13 +41,28 @@ class BasePage:
     def wait_for_element_visible(self, locator):
         return self.wait.until(EC.visibility_of_element_located(locator))
 
-    @allure.step("Сделать скриншот: {name}")
-    def take_screenshot(self, name):
-        """Создание скриншота для отладки"""
-        screenshots_dir = "screenshots"
-        if not os.path.exists(screenshots_dir):
-            os.makedirs(screenshots_dir)
-        filename = f"{screenshots_dir}/{name}_{int(time.time())}.png"
-        self.driver.save_screenshot(filename)
-        print(f"Скриншот сохранен: {filename}")
-        return filename
+    @allure.step("Выполнить JavaScript скрипт")
+    def execute_script(self, script, element=None):
+        if element:
+            return self.driver.execute_script(script, element)
+        return self.driver.execute_script(script)
+
+    @allure.step("Переключиться на окно с индексом {index}")
+    def switch_to_window(self, index):
+        self.driver.switch_to.window(self.driver.window_handles[index])
+
+    @allure.step("Получить текущий URL")
+    def get_current_url(self):
+        return self.driver.current_url
+
+    @allure.step("Ожидать URL {url}")
+    def wait_for_url(self, url):
+        return self.wait.until(EC.url_to_be(url))
+
+    @allure.step("Ожидать, что URL содержит {pattern}")
+    def wait_for_url_contains(self, pattern):
+        return self.wait.until(EC.url_contains(pattern))
+    
+    @allure.step("Ожидать открытия нового окна")
+    def wait_for_new_window(self, original_window, timeout=10):
+        self.wait.until(lambda driver: len(driver.window_handles) > len([original_window]))
