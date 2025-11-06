@@ -1,5 +1,4 @@
 import pytest
-import time
 import allure
 from pages.main_page import MainPage
 
@@ -18,19 +17,11 @@ class TestQuestions:
     def test_question_dropdown(self, driver, question_index, expected_text):
         main_page = MainPage(driver)
         
-        with allure.step(f"Проверить вопрос с индексом {question_index}"):
-            # Прокручиваем к вопросам
-            first_question = main_page.find_element(main_page.QUESTION_LOCATORS[0])
-            driver.execute_script("arguments[0].scrollIntoView();", first_question)
-            time.sleep(1)
-            
-            # Кликаем на вопрос
-            main_page.click_question(question_index)
-            
-            # Даем время для анимации
-            time.sleep(2)
-            
-            # Получаем текст ответа
-            answer_text = main_page.get_answer_text(question_index)
-            
-            assert answer_text == expected_text, f"Текст ответа не совпадает для вопроса {question_index}"
+        # Прокручиваем к вопросам и кликаем на вопрос
+        main_page.scroll_to_element(main_page.locators.QUESTION_LOCATORS[0])
+        main_page.click_question(question_index)
+        
+        # Получаем текст ответа
+        answer_text = main_page.get_answer_text(question_index)
+        
+        assert answer_text == expected_text
