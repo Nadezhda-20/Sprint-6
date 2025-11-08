@@ -1,7 +1,0 @@
-
-=== ТЕСТ РЕДИРЕКТА ПО ЛОГОТИПУ ЯНДЕКСА ===
-✓ Сохранили основное окно
-✓ Новая вкладка открыта
-✓ Текущий URL: https://sso.passport.yandex.ru/push?uuid=3e4d7e5c-8564-4f03-9140-61ab860706e3&retpath=https%3A%2F%2Fdzen.ru%2F%3Fyredirect%3Dtrue%26is_autologin_ya%3Dtrue
-✓ Успешно перешли на страницу Дзена
-✓ Вернулись в основное окно
