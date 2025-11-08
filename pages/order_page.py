@@ -37,9 +37,8 @@ class OrderPage(BasePage):
         color_locator = self.locators.COLOR_CHECKBOXES[color]
         self.click_element(color_locator)
         
-        # Комментарий
-        if comment:
-            self.input_text(self.locators.COMMENT_INPUT, comment)
+        # Комментарий - всегда заполняем, даже если пустая строка
+        self.input_text(self.locators.COMMENT_INPUT, comment)
         
         # Нажатие кнопки Заказать
         self.scroll_to_element(self.locators.ORDER_BUTTON)
