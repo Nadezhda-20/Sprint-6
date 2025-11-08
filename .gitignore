@@ -1,3 +1,10 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
 # pytest
 .pytest_cache/
 
@@ -5,12 +12,10 @@
 allure_results/
 allure-report/
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
+# Screenshots
+screenshots/
+
+# Virtual environments
 env/
 venv/
 .venv/
@@ -21,6 +26,9 @@ venv/
 *.swp
 *.swo
 
-# Системные
+# System
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
